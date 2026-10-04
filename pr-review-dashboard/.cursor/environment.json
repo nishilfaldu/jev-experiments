@@ -1,0 +1,25 @@
+{
+  "name": "just-jevving",
+  "install": "pnpm install --frozen-lockfile && CONVEX_AGENT_MODE=anonymous npx convex dev --once",
+  "terminals": [
+    {
+      "name": "dev",
+      "command": "CONVEX_AGENT_MODE=anonymous pnpm dev",
+      "description": "Runs `convex dev --start 'next dev'`: a local anonymous Convex backend (http://127.0.0.1:3210) plus the Next.js dev server (http://localhost:3000)."
+    }
+  ],
+  "ports": [
+    {
+      "name": "next",
+      "port": 3000
+    },
+    {
+      "name": "convex-backend",
+      "port": 3210
+    },
+    {
+      "name": "convex-http",
+      "port": 3211
+    }
+  ]
+}

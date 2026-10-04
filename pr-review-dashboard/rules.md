@@ -1,0 +1,22 @@
+# Reference rules
+
+These examples are for future tests. The application does not seed or load them. The yes/no examples below have `valence: violation`.
+
+| Slug                    | Question                                                                                                                            | Yes means                                                                                          | No means                                                                                                         |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `api_behavior_change`   | Does `diff` change the observable result of a public function, HTTP endpoint, or exported API for an existing caller?               | An existing caller can observe a different result, status, or side effect from a public interface. | Public interfaces keep the same observable result for existing callers.                                          |
+| `swallowed_error`       | Does `diff` catch an error and then continue so the caller receives a success result?                                               | A caught error is dropped and the surrounding code continues as a success.                         | Caught errors are returned, rethrown, or written to a log an operator can read.                                  |
+| `auth_check_removed`    | Does `diff` delete or skip an authentication or authorization check on a path that previously required one?                         | A request can reach a protected action without the check that used to guard it.                    | The authentication or authorization check still runs before the protected action.                                |
+| `silent_default_change` | Does `diff` change a default argument, feature-flag fallback, or implicit configuration that is absent from the function signature? | Callers who omit the argument now get a different default or fallback.                             | Defaults and fallbacks that callers rely on are unchanged.                                                       |
+| `data_loss`             | Does `diff` stop writing, overwrite, or delete persisted data that existing callers still read?                                     | Data an existing caller reads is removed or no longer saved.                                       | Persisted data existing callers read is still saved.                                                             |
+| `secret_exposure`       | Does `diff` place a credential, token, or secret into source code, a log line, or a response sent to a client?                      | A secret value becomes visible in the repository, logs, or a client response.                      | Secrets stay in a server-side secret store, out of source, logs, and client responses.                           |
+| `lost_atomicity`        | Does `diff` read shared state and later write it back in separate steps where a concurrent caller can observe a partial update?     | The read and the write are separate, so another caller can land in between.                        | The read and the write happen in one transaction or lock.                                                        |
+| `tests_left_behind`     | Does `diff` change production behavior while tests included in `diff` still expect the previous behavior?                           | Production code moved and the included tests still assert the old behavior.                        | Tests in the diff match the production behavior it introduces, or the diff leaves production behavior unchanged. |
+
+## Choice example (neutral)
+
+`review_focus`: Which area of this PR diff most needs reviewer attention? Options: `security` (authentication, authorization, secrets, or trust boundaries), `behavior` (user-visible or API behavior), `data` (schema, persistence, or data flow), `tests` (test coverage or correctness), `none` (no area stands out).
+
+## Score example (neutral)
+
+`review_complexity`: How complex is this PR diff to review? Rubric: 0 = trivial or isolated; 1 = localized, one focused pass; 2 = cross-cutting, multiple components; 3 = broad interactions or difficult-to-verify behavior.
